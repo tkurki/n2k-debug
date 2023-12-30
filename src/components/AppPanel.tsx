@@ -38,7 +38,7 @@ const AppPanel = (props: any) => {
     ws.onmessage = (x: any) => {
       const parsed = JSON.parse(x.data) as EventData
       setList((prev) => {
-        if (prev.length < 5000) {
+        if (prev.length < 1000) {
           prev.push(parsed)
         }
         data.next([...prev])
