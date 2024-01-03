@@ -52,7 +52,7 @@ module.exports = {
       exposes: {
         './AppPanel': './src/components/AppPanel',
       },
-      shared: [{ react: { singleton: true } }, 'react-dom', 'react-leaflet', 'leaflet'],
+      shared: [{ react: { singleton: true } }, 'react-dom'],
     }),
     new WatchIgnorePlugin({
       paths: [path.resolve(__dirname, 'public/')],
