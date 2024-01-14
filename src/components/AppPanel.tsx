@@ -52,26 +52,27 @@ const AppPanel = (props: any) => {
     <Card>
       <CardHeader>NMEA 2000 Debugging Utility</CardHeader>
       <CardBody>
-    <div id="content">
-      <Row>
-        <Col xs="12" md="6">
-          <FilterPanel doFiltering={doFiltering} filterPgns={filterPgns} />
-        </Col>
-      </Row>
-      <Row>
-        <Col xs="12" md="6">
-          <DataList
-            data={data}
-            filterPgns={filterPgns}
-            doFiltering={doFiltering}
-            onRowClicked={(row: any) => selectedPgn.next(row.data)}
-          />
-        </Col>
-        <Col xs="12" md="6">
-          <SentencePanel selectedPgn={selectedPgn}></SentencePanel>
-        </Col>
-      </Row>
-    </div></CardBody>
+        <div id="content">
+          <Row>
+            <Col xs="12" md="6">
+              <FilterPanel doFiltering={doFiltering} filterPgns={filterPgns} />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs="12" md="6">
+              <DataList
+                data={data}
+                filterPgns={filterPgns}
+                doFiltering={doFiltering}
+                onRowClicked={(row: any) => selectedPgn.next(row.data)}
+              />
+            </Col>
+            <Col xs="12" md="6">
+              <SentencePanel selectedPgn={selectedPgn}></SentencePanel>
+            </Col>
+          </Row>
+        </div>
+      </CardBody>
     </Card>
   )
 }
