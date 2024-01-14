@@ -1,10 +1,9 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 import { Subject } from 'rxjs'
 import { useObservableState } from 'observable-hooks'
 import { pgnsById } from '../types'
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap'
-
 
 interface SentencePanelProps {
   selectedPgn: Subject<any>
@@ -20,25 +19,19 @@ export const SentencePanel = (props: SentencePanelProps) => {
   return (
     <>
       <Nav tabs>
-      <NavItem>
-          <NavLink
-            className={activeTab === DATA_TAB_ID ? 'active ' : ''}
-            onClick={() => setActiveTab(DATA_TAB_ID)}
-          >
+        <NavItem>
+          <NavLink className={activeTab === DATA_TAB_ID ? 'active ' : ''} onClick={() => setActiveTab(DATA_TAB_ID)}>
             Data
           </NavLink>
         </NavItem>
         <NavItem>
-          <NavLink
-            className={activeTab === PGNDEF_TAB_ID ? 'active ' : ''}
-            onClick={() => setActiveTab(PGNDEF_TAB_ID)}
-          >
+          <NavLink className={activeTab === PGNDEF_TAB_ID ? 'active ' : ''} onClick={() => setActiveTab(PGNDEF_TAB_ID)}>
             PGN Definition
           </NavLink>
         </NavItem>
       </Nav>
       <TabContent activeTab={activeTab}>
-      <TabPane tabId={DATA_TAB_ID}>
+        <TabPane tabId={DATA_TAB_ID}>
           <h5>{pgnsById[pgnData?.pgn]?.Description}</h5>
           <pre>{JSON.stringify(pgnData, null, 2)}</pre>
         </TabPane>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Col, Row } from 'reactstrap'
+import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
 import { ReplaySubject } from 'rxjs'
 // import * as pkg from '../../package.json'
 import { PgnData, PgnNumber } from '../types'
@@ -49,6 +49,9 @@ const AppPanel = (props: any) => {
   }, [])
 
   return (
+    <Card>
+      <CardHeader>NMEA 2000 Debugging Utility</CardHeader>
+      <CardBody>
     <div id="content">
       <Row>
         <Col xs="12" md="6">
@@ -68,7 +71,8 @@ const AppPanel = (props: any) => {
           <SentencePanel selectedPgn={selectedPgn}></SentencePanel>
         </Col>
       </Row>
-    </div>
+    </div></CardBody>
+    </Card>
   )
 }
 
