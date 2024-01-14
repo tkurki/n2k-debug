@@ -1,6 +1,6 @@
 {
   "name": "@signalk/n2k-debug",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "NMEA 2000 debugging utility",
   "main": "index.js",
   "scripts": {
@@ -52,6 +52,5 @@
     "webpack": "^5.0.0",
     "webpack-cli": "^4.2.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
