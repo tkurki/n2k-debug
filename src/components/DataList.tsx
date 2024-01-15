@@ -51,7 +51,7 @@ export const DataList = (props: DataListProps) => {
         </thead>
         <tbody>
           {(data || []).filter(filterFor(doFiltering, filterPgns)).map((row: EventData, i: number) => {
-            if (row.event === 'canboatjs:unparsed:data') {
+            if (row.event === 'canboatjs:unparsed:data' && typeof row.data === 'string') {
               const [timestamp, prio, pgn, src, dest, ...input] = (row.data as string).split(',')
               return (
                 <tr key={i}>
