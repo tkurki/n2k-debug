@@ -1,8 +1,10 @@
-import React from 'react'
+import { PGNs } from '@canboat/pgns'
 import { useObservableState } from 'observable-hooks'
+import React from 'react'
 import Select from 'react-select'
 import { Col, Input, Label, Row, Table } from 'reactstrap'
 import { Subject } from 'rxjs'
+import { EventData, PgnData, PgnNumber, UnparsedPgn, isUnparsedPgn } from '../types'
 
 interface DataListProps {
   data: Subject<EventData[]>
@@ -18,7 +20,9 @@ const filterFor = (doFiltering: boolean | undefined, pgnNumbers: PgnNumber[] | u
   return (eventData: EventData) =>
     (eventData.event === 'N2KAnalyzerOut' && pgnNumbers.indexOf((eventData.data as PgnData).pgn as PgnNumber) >= 0) ||
     (eventData.event === 'canboatjs:unparsed:data' &&
-      pgnNumbers.indexOf(Number((eventData.data as string).split(',')[2]) as PgnNumber) >= 0)
+      ((typeof eventData.data === 'string' &&
+        pgnNumbers.indexOf(Number((eventData.data as string).split(',')[2]) as PgnNumber) >= 0) ||
+        (isUnparsedPgn(eventData.data) && pgnNumbers.indexOf(eventData.data.pgn) >= 0)))
 }
 
 export const DataList = (props: DataListProps) => {
@@ -51,20 +55,20 @@ export const DataList = (props: DataListProps) => {
         </thead>
         <tbody>
           {(data || []).filter(filterFor(doFiltering, filterPgns)).map((row: EventData, i: number) => {
-            if (row.event === 'canboatjs:unparsed:data' && typeof row.data === 'string') {
+            if (row.event === 'canboatjs:unparsed:data') {
+              if (isUnparsedPgn(row.data)) {
+                const unparsed = row.data as UnparsedPgn
+                return pgnRow(
+                  i,
+                  '-',
+                  unparsed.pgn + '',
+                  '-',
+                  unparsed.data.data.map((n) => n.toString(16)),
+                  () => addToFilteredPgns(Number(unparsed.pgn) as PgnNumber),
+                )
+              }
               const [timestamp, prio, pgn, src, dest, ...input] = (row.data as string).split(',')
-              return (
-                <tr key={i}>
-                  <td>{timestamp.split('T')[1]}</td>
-                  <td style={{ color: 'red' }} onClick={() => addToFilteredPgns(Number(pgn) as PgnNumber)}>
-                    {pgn}
-                  </td>
-                  <td>{src}</td>
-                  <td>
-                    <span style={{ fontFamily: 'monospace' }}>{input.join(' ')}</span>
-                  </td>
-                </tr>
-              )
+              return pgnRow(i, timestamp, pgn, src, input, () => addToFilteredPgns(Number(pgn) as PgnNumber))
             }
             if (row.event === 'N2KAnalyzerOut') {
               const { timestamp, pgn, src, input } = row.data as PgnData
@@ -86,9 +90,26 @@ export const DataList = (props: DataListProps) => {
   )
 }
 
-import { PGNs } from '@canboat/pgns'
-import { PgnData, PgnNumber } from '../types'
-import { EventData } from './AppPanel'
+const pgnRow = (
+  i: number,
+  timestamp: string,
+  pgn: string,
+  src: string,
+  input: string[],
+  onClick: React.MouseEventHandler,
+) => (
+  <tr key={i}>
+    <td>{timestamp.split('T')[1]}</td>
+    <td style={{ color: 'red' }} onClick={onClick}>
+      {pgn}
+    </td>
+    <td>{src}</td>
+    <td>
+      <span style={{ fontFamily: 'monospace' }}>{input.join(' ')}</span>
+    </td>
+  </tr>
+)
+
 const pgnOptions = PGNs.map((pgn) => ({ value: pgn.PGN, label: `${pgn.PGN} ${pgn.Description}` }))
 const pgnOptionsByPgn = pgnOptions.reduce<{
   [pgnNumber: PgnNumber]: {

@@ -2,6 +2,12 @@ export type Brand<K, T> = K & { __brand: T }
 
 export type PgnNumber = Brand<number, 'PgnNumber'>
 
+export interface EventData {
+  event: string
+  data: EventPayload
+}
+type EventPayload = PgnData | string | UnparsedPgn
+
 export interface PgnData {
   prio: number
   pgn: number
@@ -14,6 +20,18 @@ export interface PgnData {
     [key: string]: any
   }
   description: string
+}
+
+export interface UnparsedPgn {
+  pgn: PgnNumber
+  data: {
+    type: 'Buffer'
+    data: number[]
+  }
+}
+export function isUnparsedPgn(pl: EventPayload): pl is UnparsedPgn {
+  const unparsed = pl as UnparsedPgn
+  return unparsed.pgn !== undefined && unparsed.data !== undefined
 }
 
 import { PGNs } from '@canboat/pgns'

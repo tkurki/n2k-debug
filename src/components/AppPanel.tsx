@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
 import { ReplaySubject } from 'rxjs'
 // import * as pkg from '../../package.json'
-import { PgnData, PgnNumber } from '../types'
+import { EventData, PgnData, PgnNumber, UnparsedPgn } from '../types'
 import { DataList, FilterPanel, PgnOption } from './DataList'
 import { SentencePanel } from './SentencePanel'
 
@@ -16,11 +16,6 @@ import { SentencePanel } from './SentencePanel'
 //   }
 //   window.localStorage.setItem(SAFEPLUGINID, JSON.stringify({ ...settings, ...items }))
 // }
-
-export interface EventData {
-  event: string
-  data: PgnData | string
-}
 
 const AppPanel = (props: any) => {
   const [ws, setWs] = useState(null)
